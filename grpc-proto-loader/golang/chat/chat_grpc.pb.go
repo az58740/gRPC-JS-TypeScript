@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Chat_Join_FullMethodName = "/chat_package.Chat/join"
-	Chat_Send_FullMethodName = "/chat_package.Chat/send"
+	Chat_Join_FullMethodName = "/chat.Chat/join"
+	Chat_Send_FullMethodName = "/chat.Chat/send"
 )
 
 // ChatClient is the client API for Chat service.
@@ -155,7 +155,7 @@ func _Chat_Send_Handler(srv interface{}, ctx context.Context, dec func(interface
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Chat_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "chat_package.Chat",
+	ServiceName: "chat.Chat",
 	HandlerType: (*ChatServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

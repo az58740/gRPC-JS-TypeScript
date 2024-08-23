@@ -3,7 +3,7 @@ syntax = "proto3";
 option go_package="github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/chat_package";
 
 
-package chat_package;
+package chat;
 
 message ServerMessage {
   string user = 1;
