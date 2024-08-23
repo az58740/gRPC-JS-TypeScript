@@ -3,7 +3,7 @@
 BASEDIR=$(dirname "$0")
 cd ${BASEDIR}/
 
-PROTO_DEST=./golang
+PROTO_DEST=./golang/chat
 
 mkdir -p ${PROTO_DEST}
 

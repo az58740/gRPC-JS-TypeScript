@@ -1,4 +1,4 @@
-// Original file: proto/example.proto
+// Original file: proto/chat.proto
 
 
 export interface ClientMessage {
