@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package="github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/chat_package";
+option go_package="github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/chat";
 
 
 package chat;
