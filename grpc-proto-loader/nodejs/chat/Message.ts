@@ -1,0 +1,15 @@
+// Original file: proto/chat.proto
+
+import type { Timestamp as _google_protobuf_Timestamp, Timestamp__Output as _google_protobuf_Timestamp__Output } from '../google/protobuf/Timestamp';
+
+export interface Message {
+  'id'?: (string);
+  'content'?: (string);
+  'timestamp'?: (_google_protobuf_Timestamp | null);
+}
+
+export interface Message__Output {
+  'id'?: (string);
+  'content'?: (string);
+  'timestamp'?: (_google_protobuf_Timestamp__Output);
+}
