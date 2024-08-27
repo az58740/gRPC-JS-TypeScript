@@ -1,5 +1,3 @@
-github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823085458-c1e20a08e301 h1:1DvKbkgHIV07wlxY+HOC43rRP8OLyFHtovKsNkCwy+Q=
-github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823085458-c1e20a08e301/go.mod h1:Z4DmDelfGGODta7yTYVFXF2XLbIm3LTQQJJ94RDZGv8=
 github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823123756-d430557bbae5 h1:x8ucNaM8bELvur7WNilHAYKCHzTNZOcr/XWg5OwtrtE=
 github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823123756-d430557bbae5/go.mod h1:Z4DmDelfGGODta7yTYVFXF2XLbIm3LTQQJJ94RDZGv8=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=

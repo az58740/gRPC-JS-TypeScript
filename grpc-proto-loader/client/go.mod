@@ -1,4 +1,4 @@
-module github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/server
+module github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/client
 
 go 1.22.0
 

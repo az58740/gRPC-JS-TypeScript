@@ -1,15 +1,15 @@
 // Original file: proto/chat.proto
 
-import type { Timestamp as _google_protobuf_Timestamp, Timestamp__Output as _google_protobuf_Timestamp__Output } from '../google/protobuf/Timestamp';
+import type { Channel as _chat_Channel, Channel__Output as _chat_Channel__Output } from '../chat/Channel';
 
 export interface Message {
-  'id'?: (string);
-  'content'?: (string);
-  'timestamp'?: (_google_protobuf_Timestamp | null);
+  'sender'?: (string);
+  'channel'?: (_chat_Channel | null);
+  'message'?: (string);
 }
 
 export interface Message__Output {
-  'id'?: (string);
-  'content'?: (string);
-  'timestamp'?: (_google_protobuf_Timestamp__Output);
+  'sender'?: (string);
+  'channel'?: (_chat_Channel__Output);
+  'message'?: (string);
 }

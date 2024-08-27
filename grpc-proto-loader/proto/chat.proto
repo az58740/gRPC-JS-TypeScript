@@ -2,29 +2,30 @@ syntax = "proto3";
 
 option go_package="github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/chat";
 
-import "google/protobuf/timestamp.proto";
 
 package chat;
 
+
+service ChatService {
+    rpc JoinChannel(Channel) returns (stream Message) {}
+    rpc SendMessage(stream Message) returns (MessageAck) {}
+}
+
+message Channel {
+    string name = 1;
+    string senders_name = 2;
+}
 message User {
   string id = 1;
   string name = 2;
 }
 
 message Message {
-  string id = 1;
-  string content = 2;
-  google.protobuf.Timestamp timestamp = 3;
+    string sender = 1;
+    Channel channel = 2;
+    string message = 3;
 }
 
-message Connect {
-  User user = 1;
-  bool active = 2;
-}
-
-message Close {}
-
-service Broadcast {
-  rpc CreateStream(Connect) returns (stream Message);
-  rpc BroadcastMessage(Message) returns (Close);
+message MessageAck {
+    string status = 1;
 }
