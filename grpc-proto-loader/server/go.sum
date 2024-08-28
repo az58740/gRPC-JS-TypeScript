@@ -1,7 +1,5 @@
-github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823085458-c1e20a08e301 h1:1DvKbkgHIV07wlxY+HOC43rRP8OLyFHtovKsNkCwy+Q=
-github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823085458-c1e20a08e301/go.mod h1:Z4DmDelfGGODta7yTYVFXF2XLbIm3LTQQJJ94RDZGv8=
-github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823123756-d430557bbae5 h1:x8ucNaM8bELvur7WNilHAYKCHzTNZOcr/XWg5OwtrtE=
-github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823123756-d430557bbae5/go.mod h1:Z4DmDelfGGODta7yTYVFXF2XLbIm3LTQQJJ94RDZGv8=
+github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240827133803-24160f693ab5 h1:WQ1WsFTrfzz9yfu59cIvjaCFyd3GBZkiSVtaiGnq5SM=
+github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240827133803-24160f693ab5/go.mod h1:Z4DmDelfGGODta7yTYVFXF2XLbIm3LTQQJJ94RDZGv8=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 golang.org/x/net v0.25.0 h1:d/OCCoBEUq33pjydKrGQhw7IlUPI2Oylr+8qLx49kac=

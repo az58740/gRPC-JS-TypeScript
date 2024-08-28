@@ -1,68 +1,48 @@
 package handler
 
 import (
-	"context"
 	"fmt"
-	"sync"
+	"io"
 
-	proto "github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/golang/chat"
+	chatPb "github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/golang/chat"
 )
 
-type Connection struct {
-	proto.UnimplementedBroadcastServer
-	stream proto.Broadcast_CreateStreamServer
-	id     string
-	active bool
-	error  chan error
+type chatServiceServer struct {
+	chatPb.UnimplementedChatServiceServer
+	channel map[string][]chan *chatPb.Message
 }
 
-type Pool struct {
-	proto.UnimplementedBroadcastServer
-	Connection []*Connection
-}
-
-func (p *Pool) CreateStream(pconn *proto.Connect, stream proto.Broadcast_CreateStreamServer) error {
-	conn := &Connection{
-		stream: stream,
-		id:     pconn.User.Id,
-		active: true,
-		error:  make(chan error),
+func (c *chatServiceServer) JoinChannel(ch *chatPb.Channel, msgStream chatPb.ChatService_JoinChannelServer) error {
+	msgChannel := make(chan *chatPb.Message)
+	c.channel[ch.Name] = append(c.channel[ch.Name], msgChannel)
+	//doing this never closes the stream
+	for {
+		select {
+		//which notify’s that the channel is closed
+		case <-msgStream.Context().Done():
+			return nil
+		case msg := <-msgChannel:
+			fmt.Printf("GO ROUTINE (got message): %v \n", msg)
+			msgStream.Send(msg)
+		}
 	}
-
-	p.Connection = append(p.Connection, conn)
-
-	return <-conn.error
 }
-
-func (s *Pool) BroadcastMessage(ctx context.Context, msg *proto.Message) (*proto.Close, error) {
-	wait := sync.WaitGroup{}
-	done := make(chan int)
-
-	for _, conn := range s.Connection {
-		wait.Add(1)
-
-		go func(msg *proto.Message, conn *Connection) {
-			defer wait.Done()
-
-			if conn.active {
-				err := conn.stream.Send(msg)
-				fmt.Printf("Sending message to: %v from %v\n", conn.id, msg.Id)
-
-				if err != nil {
-					fmt.Printf("Error with Stream: %v - Error: %v\n", conn.stream, err)
-					conn.active = false
-					conn.error <- err
-				}
-			}
-		}(msg, conn)
-
+func (c *chatServiceServer) SendMessage(msgStream chatPb.ChatService_SendMessageServer) error {
+	msg, err := msgStream.Recv()
+	if err == io.EOF {
+		return nil
 	}
+	if err != nil {
+		return err
+	}
+	ack := chatPb.MessageAck{Status: "SENT"}
+	msgStream.SendAndClose(&ack)
 
 	go func() {
-		wait.Wait()
-		close(done)
+		streams := c.channel[msg.Channel.Name]
+		for _, msgchan := range streams {
+			msgchan <- <-msgchan
+		}
 	}()
-
-	<-done
-	return &proto.Close{}, nil
+	return nil
 }
