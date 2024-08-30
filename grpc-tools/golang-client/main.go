@@ -67,6 +67,18 @@ func sendMessage(ctx context.Context, client chatPb.ChatServiceClient, message s
 	}
 	fmt.Printf("Message sent: %v \n", ack)
 }
+func chat(ctx context.Context, client chatPb.ChatServiceClient, message string) {
+	stream, err := client.Chat(ctx)
+	if err != nil {
+		log.Printf("Cannot send message: error: %v", err)
+	}
+	msg := chatPb.ChatRequest{
+		Message: message,
+	}
+	fmt.Print(&msg)
+	stream.Send(&msg)
+
+}
 
 func main() {
 	flag.Parse()
@@ -84,7 +96,7 @@ func main() {
 	go joinChannel(ctx, client)
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		go sendMessage(ctx, client, scanner.Text())
+		go chat(ctx, client, scanner.Text())
 	}
 
 }

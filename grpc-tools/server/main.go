@@ -25,7 +25,7 @@ func (c *chatServiceServer) Chat(msgStream chatPb.ChatService_ChatServer) error 
 			case <-msgStream.Context().Done():
 				return
 			case msg := <-msgChannel:
-				fmt.Printf("GO ROUTINE (got message): %v \n", msg)
+				fmt.Printf("Server: %v \n", msg)
 				msgStream.Send(msg)
 			}
 		}
@@ -39,9 +39,11 @@ func (c *chatServiceServer) Chat(msgStream chatPb.ChatService_ChatServer) error 
 			log.Fatalf("error while reading client stream: %v", err)
 			return err
 		}
-		var response *chatPb.ChatResponse
-		response.Message = msg.GetMessage()
-		msgChannel <- response
+
+		msgChannel <- &chatPb.ChatResponse{
+			Message:  msg.GetMessage(),
+			Username: "default",
+		}
 	}
 }
 

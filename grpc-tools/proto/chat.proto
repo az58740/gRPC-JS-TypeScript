@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package="github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/chat";
+
+
+package chat;
+
+
+service ChatService {
+    rpc Chat(stream ChatRequest) returns (stream ChatResponse){};
+}
+
+
+message ChatRequest{
+    string message=1;
+}
+message ChatResponse{
+    string username=1;
+    string message=2;
+}

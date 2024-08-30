@@ -1,5 +1,4 @@
-import {Channel,Message} from "../nodejs/chat_pb";
-import joinChannel from "./joinChannel";
+import {ChatRequest} from "../nodejs/chat_pb";
 import * as grpc from "@grpc/grpc-js"
 import * as readline from 'readline';
 import  {client} from "./utils"
@@ -19,21 +18,19 @@ client.waitForReady(deadline,(err)=>{
     input:process.stdin,
     output:process.stdout
    } )
-   const channel=new Channel();
-   channel.setName("defult");
-   channel.setSendersName("defult");
- const strm =  await client.joinChannel(channel);
-    strm.on("data",(chunk)=>{
-        console.log(`Joined channel:: ${chunk} \n`);
-    })
+ const username =process.argv[0];  
+if(!username) console.error("No username, can not join chat") , process.exit();
+const metadata=new grpc.Metadata();
+metadata.set("username",username)
+const strm =client.chat(metadata)
 
-
-        
     r1.on("line",(line)=>{
-        if(line==="quit"){
+        if(line==="q"){
            r1.close()
         }else{
-            console.log(line)
+    const request=new ChatRequest();
+    request.setMessage(line)
+    strm.write(request)
         }
     })
 
