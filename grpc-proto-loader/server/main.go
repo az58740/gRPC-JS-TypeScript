@@ -15,6 +15,36 @@ type chatServiceServer struct {
 	channel map[string][]chan *chatPb.Message
 }
 
+func (c *chatServiceServer) Chat(msgStream chatPb.ChatService_ChatServer) error {
+	msgChannel := make(chan *chatPb.ChatResponse)
+	go func() {
+		//doing this never closes the stream
+		for {
+			select {
+			//which notify’s that the channel is closed
+			case <-msgStream.Context().Done():
+				return
+			case msg := <-msgChannel:
+				fmt.Printf("GO ROUTINE (got message): %v \n", msg)
+				msgStream.Send(msg)
+			}
+		}
+	}()
+	for {
+		msg, err := msgStream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			log.Fatalf("error while reading client stream: %v", err)
+			return err
+		}
+		var response *chatPb.ChatResponse
+		response.Message = msg.GetMessage()
+		msgChannel <- response
+	}
+}
+
 func (c *chatServiceServer) JoinChannel(ch *chatPb.Channel, msgStream chatPb.ChatService_JoinChannelServer) error {
 	msgChannel := make(chan *chatPb.Message)
 	c.channel[ch.Name] = append(c.channel[ch.Name], msgChannel)
