@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	ChatService_JoinChannel_FullMethodName = "/chat.ChatService/JoinChannel"
 	ChatService_SendMessage_FullMethodName = "/chat.ChatService/SendMessage"
+	ChatService_Chat_FullMethodName        = "/chat.ChatService/Chat"
 )
 
 // ChatServiceClient is the client API for ChatService service.
@@ -29,6 +30,7 @@ const (
 type ChatServiceClient interface {
 	JoinChannel(ctx context.Context, in *Channel, opts ...grpc.CallOption) (ChatService_JoinChannelClient, error)
 	SendMessage(ctx context.Context, opts ...grpc.CallOption) (ChatService_SendMessageClient, error)
+	Chat(ctx context.Context, opts ...grpc.CallOption) (ChatService_ChatClient, error)
 }
 
 type chatServiceClient struct {
@@ -105,12 +107,44 @@ func (x *chatServiceSendMessageClient) CloseAndRecv() (*MessageAck, error) {
 	return m, nil
 }
 
+func (c *chatServiceClient) Chat(ctx context.Context, opts ...grpc.CallOption) (ChatService_ChatClient, error) {
+	stream, err := c.cc.NewStream(ctx, &ChatService_ServiceDesc.Streams[2], ChatService_Chat_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &chatServiceChatClient{stream}
+	return x, nil
+}
+
+type ChatService_ChatClient interface {
+	Send(*ChatRequest) error
+	Recv() (*ChatResponse, error)
+	grpc.ClientStream
+}
+
+type chatServiceChatClient struct {
+	grpc.ClientStream
+}
+
+func (x *chatServiceChatClient) Send(m *ChatRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *chatServiceChatClient) Recv() (*ChatResponse, error) {
+	m := new(ChatResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // ChatServiceServer is the server API for ChatService service.
 // All implementations must embed UnimplementedChatServiceServer
 // for forward compatibility
 type ChatServiceServer interface {
 	JoinChannel(*Channel, ChatService_JoinChannelServer) error
 	SendMessage(ChatService_SendMessageServer) error
+	Chat(ChatService_ChatServer) error
 	mustEmbedUnimplementedChatServiceServer()
 }
 
@@ -123,6 +157,9 @@ func (UnimplementedChatServiceServer) JoinChannel(*Channel, ChatService_JoinChan
 }
 func (UnimplementedChatServiceServer) SendMessage(ChatService_SendMessageServer) error {
 	return status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
+}
+func (UnimplementedChatServiceServer) Chat(ChatService_ChatServer) error {
+	return status.Errorf(codes.Unimplemented, "method Chat not implemented")
 }
 func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
 
@@ -184,6 +221,32 @@ func (x *chatServiceSendMessageServer) Recv() (*Message, error) {
 	return m, nil
 }
 
+func _ChatService_Chat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ChatServiceServer).Chat(&chatServiceChatServer{stream})
+}
+
+type ChatService_ChatServer interface {
+	Send(*ChatResponse) error
+	Recv() (*ChatRequest, error)
+	grpc.ServerStream
+}
+
+type chatServiceChatServer struct {
+	grpc.ServerStream
+}
+
+func (x *chatServiceChatServer) Send(m *ChatResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *chatServiceChatServer) Recv() (*ChatRequest, error) {
+	m := new(ChatRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // ChatService_ServiceDesc is the grpc.ServiceDesc for ChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -200,6 +263,12 @@ var ChatService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SendMessage",
 			Handler:       _ChatService_SendMessage_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Chat",
+			Handler:       _ChatService_Chat_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

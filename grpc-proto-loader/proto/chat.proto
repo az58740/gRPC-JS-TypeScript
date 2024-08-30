@@ -7,8 +7,9 @@ package chat;
 
 
 service ChatService {
-    rpc JoinChannel(Channel) returns (stream Message) {}
-    rpc SendMessage(stream Message) returns (MessageAck) {}
+    rpc JoinChannel(Channel) returns (stream Message) {};
+    rpc SendMessage(stream Message) returns (MessageAck) {};
+    rpc Chat(stream ChatRequest) returns (stream ChatResponse){};
 }
 
 message Channel {
@@ -28,4 +29,11 @@ message Message {
 
 message MessageAck {
     string status = 1;
+}
+message ChatRequest{
+    string message=1;
+}
+message ChatResponse{
+    string username=1;
+    string message=2;
 }

@@ -3,7 +3,7 @@ module github.com/az58740/gRPC-JS-TypeScript/grpc-proto-loader/client
 go 1.22.0
 
 require (
-	github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240823123756-d430557bbae5
+	github.com/az58740/gRPC-JS-TypeScript v0.0.0-20240828172917-4998064ff986
 	google.golang.org/grpc v1.65.0
 )
 
